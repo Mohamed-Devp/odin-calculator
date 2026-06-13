@@ -50,7 +50,7 @@ button {
 
 .calculator {
     width: min(100%, 24rem);
-    padding: 2rem;
+    padding: 1.5rem;
     border-radius: 16px;
     background-color: var(--bg-color-light);
     box-shadow: 4px 4px 8px var(--shadow-color);
@@ -103,4 +103,12 @@ button {
 .btn_selected {
     border: 1px solid var(--border-color-dark);
     background-color: var(--bg-color-light);
+}
+
+/* || MEDIA QURIES */
+
+@media screen and (min-width: 32rem) {
+    .calculator {
+        padding: 2rem;
+    }
 }
