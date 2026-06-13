@@ -13,6 +13,8 @@ let strFirstNumber = "";
 let strSecondNumber = "";
 let operator = "";
 
+let selectedOperatorBtn;
+
 function operate() {
     const firstNumber = Number(strFirstNumber);
     const secondNumber = Number(strSecondNumber);
@@ -48,18 +50,52 @@ function appendDigit(event) {
         strFirstNumber = digit;
 
         isEvaluated = false;
+
+        calcDisplay.textContent = strFirstNumber;
     }
     else if (isFirstNumberEntered) {
         strSecondNumber += digit;
+
+        calcDisplay.textContent = strSecondNumber;
     }
     else {
         strFirstNumber += digit;
+
+        calcDisplay.textContent = strFirstNumber;
+    }
+}
+
+function updateOperator(event) {
+    const isFirstNumberEntered = strFirstNumber.length > 0;
+    const isSecondNumberEntered = strSecondNumber.length > 0;
+
+    if (!isFirstNumberEntered) {
+        return;
     }
 
-    calcDisplay.textContent = isFirstNumberEntered
-        ? strFirstNumber : strSecondNumber;
+    const operatorBtn = event.target;
+
+    if (selectedOperatorBtn) {
+        selectedOperatorBtn.classList.remove("btn_selected");
+    }
+
+    operatorBtn.classList.add("btn_selected");
+    selectedOperatorBtn = operatorBtn;
+
+    if (isSecondNumberEntered) {
+        strFirstNumber = String(operate());
+        strSecondNumber = "";
+
+        calcDisplay.textContent = strFirstNumber;
+    }
+
+    operator = operatorBtn.getAttribute("data-operator");
 }
 
 digitBtns.forEach(digitBtn => {
     digitBtn.addEventListener("click", appendDigit);
+});
+
+operatorBtns.forEach(operatorBtn => {
+    operatorBtn.addEventListener("click", updateOperator);
 });
