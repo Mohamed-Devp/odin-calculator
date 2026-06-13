@@ -38,3 +38,28 @@ function operate() {
 
     return result;
 }
+
+function appendDigit(event) {
+    const digit = event.target.getAttribute("data-value");
+
+    const isFirstNumberEntered = operator.length === 1;
+
+    if (isEvaluated) {
+        strFirstNumber = digit;
+
+        isEvaluated = false;
+    }
+    else if (isFirstNumberEntered) {
+        strSecondNumber += digit;
+    }
+    else {
+        strFirstNumber += digit;
+    }
+
+    calcDisplay.textContent = isFirstNumberEntered
+        ? strFirstNumber : strSecondNumber;
+}
+
+digitBtns.forEach(digitBtn => {
+    digitBtn.addEventListener("click", appendDigit);
+});
