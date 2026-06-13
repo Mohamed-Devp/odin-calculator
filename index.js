@@ -12,3 +12,29 @@ let isEvaluated = false;
 let strFirstNumber = "";
 let strSecondNumber = "";
 let operator = "";
+
+function operate() {
+    const firstNumber = Number(strFirstNumber);
+    const secondNumber = Number(strSecondNumber);
+
+    let result;
+
+    switch(operator) {
+        case "+":
+            result = firstNumber + secondNumber;
+            break;
+
+        case "-":
+            result = firstNumber - secondNumber;
+            break;
+
+        case "*":
+            result = firstNumber * secondNumber;
+            break;
+        
+        case "/":
+            result = firstNumber / secondNumber;
+    }
+
+    return result;
+}
