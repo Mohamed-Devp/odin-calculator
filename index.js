@@ -90,6 +90,8 @@ function updateOperator(event) {
     }
 
     operator = operatorBtn.getAttribute("data-operator");
+
+    isEvaluated = false;
 }
 
 digitBtns.forEach(digitBtn => {
@@ -98,4 +100,19 @@ digitBtns.forEach(digitBtn => {
 
 operatorBtns.forEach(operatorBtn => {
     operatorBtn.addEventListener("click", updateOperator);
+});
+
+evaluateBtn.addEventListener("click", () => {
+    const isSecondNumberEntered = strSecondNumber.length > 0;
+
+    if (isSecondNumberEntered) {
+        strFirstNumber = String(operate());
+        strSecondNumber = "";
+        operator = "";
+
+        isEvaluated = true;
+
+        calcDisplay.textContent = strFirstNumber;
+        selectedOperatorBtn.classList.remove("btn_selected");
+    }
 });
