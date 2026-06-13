@@ -63,6 +63,8 @@ function appendDigit(event) {
 
         calcDisplay.textContent = strFirstNumber;
     }
+
+    clearBtn.textContent = "CE";
 }
 
 function updateOperator(event) {
@@ -113,6 +115,20 @@ evaluateBtn.addEventListener("click", () => {
         isEvaluated = true;
 
         calcDisplay.textContent = strFirstNumber;
+        selectedOperatorBtn.classList.remove("btn_selected");
+    }
+});
+
+clearBtn.addEventListener("click", () => {
+    strFirstNumber = "";
+    strSecondNumber = "";
+    operator = "";
+
+    isEvaluated = false;
+
+    calcDisplay.textContent = "";
+    clearBtn.textContent = "AC";
+    if (selectedOperatorBtn) {
         selectedOperatorBtn.classList.remove("btn_selected");
     }
 });
