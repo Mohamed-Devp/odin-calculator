@@ -38,6 +38,10 @@ function operate() {
             break;
         
         case "/":
+            if (secondNumber === 0) {
+                throw new Error("Division by 0");
+            }
+
             result = firstNumber / secondNumber;
     }
 
@@ -72,7 +76,16 @@ function updateOperator(event) {
     }
 
     if (isSecondNumberEntered) {
-        firstNumber = operate();
+        try {
+            firstNumber = operate();
+        }
+        catch (error) {
+            clear();
+            calcDisplay.textContent = `Error: ${error.message}`;
+            
+            return;
+        }
+
         secondNumber = 0;
 
         isSecondNumberEntered = false;
@@ -100,7 +113,16 @@ function evaluate() {
         return;
     }
 
-    firstNumber = operate();
+    try {
+        firstNumber = operate();
+    }
+    catch (error) {
+        clear();
+        calcDisplay.textContent = `Error: ${error.message}`;
+        
+        return;
+    }
+
     secondNumber = 0;
 
     operator = "";
