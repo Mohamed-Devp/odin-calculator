@@ -7,21 +7,24 @@ const evaluateBtn = document.querySelector(".btn_type_evaluate");
 
 const clearBtn = document.querySelector(".btn_type_clear");
 
-let isEvaluated = false;
+let firstNumber = 0;
+let secondNumber = 0;
 
-let strFirstNumber = "";
-let strSecondNumber = "";
 let operator = "";
+
+let isFirstNumberEntered = false;
+let isSecondNumberEntered = false;
+
+let isOperatorSelected = false;
+
+let isEvaluated = false;
 
 let selectedOperatorBtn;
 
 function operate() {
-    const firstNumber = Number(strFirstNumber);
-    const secondNumber = Number(strSecondNumber);
-
     let result;
 
-    switch(operator) {
+    switch (operator) {
         case "+":
             result = firstNumber + secondNumber;
             break;
@@ -42,37 +45,39 @@ function operate() {
 }
 
 function appendDigit(event) {
-    const digit = event.target.getAttribute("data-value");
-
-    const isFirstNumberEntered = operator.length === 1;
+    const digit = Number(event.target.dataset.value);
 
     if (isEvaluated) {
-        strFirstNumber = digit;
+        firstNumber = digit;
 
         isEvaluated = false;
-
-        calcDisplay.textContent = strFirstNumber;
     }
-    else if (isFirstNumberEntered) {
-        strSecondNumber += digit;
-
-        calcDisplay.textContent = strSecondNumber;
+    else if (isOperatorSelected) {
+        secondNumber = secondNumber * 10 + digit;
+        isSecondNumberEntered = true;
     }
     else {
-        strFirstNumber += digit;
-
-        calcDisplay.textContent = strFirstNumber;
+        firstNumber = firstNumber * 10 + digit;
+        isFirstNumberEntered = true;
     }
 
+    calcDisplay.textContent = isOperatorSelected
+        ? secondNumber : firstNumber;
     clearBtn.textContent = "CE";
 }
 
 function updateOperator(event) {
-    const isFirstNumberEntered = strFirstNumber.length > 0;
-    const isSecondNumberEntered = strSecondNumber.length > 0;
-
     if (!isFirstNumberEntered) {
         return;
+    }
+
+    if (isSecondNumberEntered) {
+        firstNumber = operate();
+        secondNumber = 0;
+
+        isSecondNumberEntered = false;
+
+        calcDisplay.textContent = firstNumber;
     }
 
     const operatorBtn = event.target;
@@ -84,16 +89,52 @@ function updateOperator(event) {
     operatorBtn.classList.add("btn_selected");
     selectedOperatorBtn = operatorBtn;
 
-    if (isSecondNumberEntered) {
-        strFirstNumber = String(operate());
-        strSecondNumber = "";
+    operator = operatorBtn.dataset.operator;
 
-        calcDisplay.textContent = strFirstNumber;
+    isOperatorSelected = true;
+    isEvaluated = false;
+}
+
+function evaluate() {
+    if (!isSecondNumberEntered) {
+        return;
     }
 
-    operator = operatorBtn.getAttribute("data-operator");
+    firstNumber = operate();
+    secondNumber = 0;
+
+    operator = "";
+
+    isSecondNumberEntered = false;
+
+    isOperatorSelected = false;
+
+    isEvaluated = true;
+
+    calcDisplay.textContent = firstNumber;
+
+    selectedOperatorBtn.classList.remove("btn_selected");
+}
+
+function clear() {
+    firstNumber = 0;
+    secondNumber = 0;
+
+    operator = "";
+
+    isFirstNumberEntered = false;
+    isSecondNumberEntered = false;
+
+    isOperatorSelected = false;
 
     isEvaluated = false;
+
+    calcDisplay.textContent = "";
+    clearBtn.textContent = "AC";
+
+    if (selectedOperatorBtn) {
+        selectedOperatorBtn.classList.remove("btn_selected");
+    }
 }
 
 digitBtns.forEach(digitBtn => {
@@ -104,31 +145,6 @@ operatorBtns.forEach(operatorBtn => {
     operatorBtn.addEventListener("click", updateOperator);
 });
 
-evaluateBtn.addEventListener("click", () => {
-    const isSecondNumberEntered = strSecondNumber.length > 0;
+evaluateBtn.addEventListener("click", evaluate);
 
-    if (isSecondNumberEntered) {
-        strFirstNumber = String(operate());
-        strSecondNumber = "";
-        operator = "";
-
-        isEvaluated = true;
-
-        calcDisplay.textContent = strFirstNumber;
-        selectedOperatorBtn.classList.remove("btn_selected");
-    }
-});
-
-clearBtn.addEventListener("click", () => {
-    strFirstNumber = "";
-    strSecondNumber = "";
-    operator = "";
-
-    isEvaluated = false;
-
-    calcDisplay.textContent = "";
-    clearBtn.textContent = "AC";
-    if (selectedOperatorBtn) {
-        selectedOperatorBtn.classList.remove("btn_selected");
-    }
-});
+clearBtn.addEventListener("click", clear);
